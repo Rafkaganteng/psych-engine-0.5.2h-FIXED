@@ -135,39 +135,6 @@
 		{
 			"loop": false,
 			"offsets": [
-				37,
-				11
-			],
-			"anim": "firstDeath",
-			"fps": 24,
-			"name": "BF dies",
-			"indices": []
-		},
-		{
-			"loop": true,
-			"offsets": [
-				37,
-				5
-			],
-			"anim": "deathLoop",
-			"fps": 24,
-			"name": "BF Dead Loop",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [
-				37,
-				69
-			],
-			"anim": "deathConfirm",
-			"fps": 24,
-			"name": "BF Dead confirm",
-			"indices": []
-		},
-		{
-			"loop": false,
-			"offsets": [
 				-5,
 				-19
 			],
@@ -197,10 +164,43 @@
 			"fps": 24,
 			"name": "bf pre attack",
 			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				147,
+				223
+			],
+			"anim": "firstDeath",
+			"fps": 24,
+			"name": "TDL_DEATH",
+			"indices": []
+		},
+		{
+			"loop": true,
+			"offsets": [
+				13,
+				-95
+			],
+			"anim": "deathLoop",
+			"fps": 24,
+			"name": "TDL_RETRY",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				304,
+				123
+			],
+			"anim": "deathConfirm",
+			"fps": 24,
+			"name": "TDL_CONFIRM",
+			"indices": []
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/BOYFRIEND",
+	"image": "deathanims/TDL_Death",
 	"position": [
 		0,
 		350
@@ -213,8 +213,8 @@
 		209
 	],
 	"camera_position": [
-		0,
-		0
+		380,
+		-380
 	],
 	"sing_duration": 4,
 	"scale": 1
