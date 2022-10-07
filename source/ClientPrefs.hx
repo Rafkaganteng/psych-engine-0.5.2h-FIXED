@@ -8,8 +8,12 @@ import Controls;
 
 class ClientPrefs {
 	public static var downScroll:Bool = false;
+	public static var hitSound:Bool = false;
+	public static var shaders:Bool = true;
+	public static var bigHP:Bool = false;
 	public static var middleScroll:Bool = false;
-	public static var showFPS:Bool = #if android false #else true #end;
+	public static var reanimatedbf:Bool = false;
+	public static var showFPS:Bool = true;
 	public static var flashing:Bool = true;
 	public static var globalAntialiasing:Bool = true;
 	public static var noteSplashes:Bool = true;
@@ -21,27 +25,17 @@ class ClientPrefs {
 	public static var hideHud:Bool = false;
 	public static var noteOffset:Int = 0;
 	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-	public static var vibration:Bool = false;
+	public static var imagesPersist:Bool = false;
 	public static var ghostTapping:Bool = true;
 	public static var timeBarType:String = 'Time Left';
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
 	public static var healthBarAlpha:Float = 1;
-	public static var controllerMode:Bool = #if android true #else false #end;
-	public static var hitsoundVolume:Float = 0;
-        public static var pauseMusic:String = 'Tea Time';
+	public static var controllerMode:Bool = false;
+	public static var animatedbg:Bool = true;
+	public static var camGlitch:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
-		'scrolltype' => 'multiplicative', 
-		// anyone reading this, amod is multiplicative speed mod, cmod is constant speed mod, and xmod is bpm based speed mod.
-		// an amod example would be chartSpeed * multiplier
-		// cmod would just be constantSpeed = chartSpeed
-		// and xmod basically works by basing the speed on the bpm.
-		// iirc (beatsPerSecond * (conductorToNoteDifference / 1000)) * noteSize (110 or something like that depending on it, prolly just use note.height)
-		// bps is calculated by bpm / 60
-		// oh yeah and you'd have to actually convert the difference to seconds which I already do, because this is based on beats and stuff. but it should work
-		// just fine. but I wont implement it because I don't know how you handle sustains and other stuff like that.
-		// oh yeah when you calculate the bps divide it by the songSpeed or rate because it wont scroll correctly when speeds exist.
 		'songspeed' => 1.0,
 		'healthgain' => 1.0,
 		'healthloss' => 1.0,
@@ -52,6 +46,8 @@ class ClientPrefs {
 	];
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
+	public static var keSustains:Bool = false; //i was bored, okay?
+	
 	public static var ratingOffset:Int = 0;
 	public static var sickWindow:Int = 45;
 	public static var goodWindow:Int = 90;
@@ -92,6 +88,10 @@ class ClientPrefs {
 
 	public static function saveSettings() {
 		FlxG.save.data.downScroll = downScroll;
+		FlxG.save.data.hitSound = hitSound;
+		FlxG.save.data.reanimatedbf = reanimatedbf;
+		FlxG.save.data.shaders = shaders;
+		FlxG.save.data.bigHP = bigHP;
 		FlxG.save.data.middleScroll = middleScroll;
 		FlxG.save.data.showFPS = showFPS;
 		FlxG.save.data.flashing = flashing;
@@ -105,7 +105,7 @@ class ClientPrefs {
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
 		FlxG.save.data.arrowHSV = arrowHSV;
-		FlxG.save.data.vibration = vibration;
+		FlxG.save.data.imagesPersist = imagesPersist;
 		FlxG.save.data.ghostTapping = ghostTapping;
 		FlxG.save.data.timeBarType = timeBarType;
 		FlxG.save.data.scoreZoom = scoreZoom;
@@ -122,8 +122,8 @@ class ClientPrefs {
 		FlxG.save.data.safeFrames = safeFrames;
 		FlxG.save.data.gameplaySettings = gameplaySettings;
 		FlxG.save.data.controllerMode = controllerMode;
-		FlxG.save.data.hitsoundVolume = hitsoundVolume;
-		FlxG.save.data.pauseMusic = pauseMusic;
+		FlxG.save.data.animatedbg = animatedbg;
+		FlxG.save.data.camGlitch = camGlitch;
 	
 		FlxG.save.flush();
 
@@ -137,6 +137,18 @@ class ClientPrefs {
 	public static function loadPrefs() {
 		if(FlxG.save.data.downScroll != null) {
 			downScroll = FlxG.save.data.downScroll;
+		}
+		if(FlxG.save.data.hitSound != null) {
+			hitSound = FlxG.save.data.hitSound;
+		}
+		if(FlxG.save.data.hitSound != null) {
+			shaders = FlxG.save.data.shaders;
+		}
+		if(FlxG.save.data.bigHP != null) {
+			bigHP = FlxG.save.data.bigHP;
+		}
+		if(FlxG.save.data.reanimatedbf != null) {
+			reanimatedbf = FlxG.save.data.reanimatedbf;
 		}
 		if(FlxG.save.data.middleScroll != null) {
 			middleScroll = FlxG.save.data.middleScroll;
@@ -187,8 +199,9 @@ class ClientPrefs {
 		if(FlxG.save.data.arrowHSV != null) {
 			arrowHSV = FlxG.save.data.arrowHSV;
 		}
-		if(FlxG.save.data.vibration != null) {
-			vibration = FlxG.save.data.vibration;
+		if(FlxG.save.data.imagesPersist != null) {
+			imagesPersist = FlxG.save.data.imagesPersist;
+			FlxGraphic.defaultPersist = ClientPrefs.imagesPersist;
 		}
 		if(FlxG.save.data.ghostTapping != null) {
 			ghostTapping = FlxG.save.data.ghostTapping;
@@ -227,11 +240,11 @@ class ClientPrefs {
 		if(FlxG.save.data.controllerMode != null) {
 			controllerMode = FlxG.save.data.controllerMode;
 		}
-		if(FlxG.save.data.hitsoundVolume != null) {
-			hitsoundVolume = FlxG.save.data.hitsoundVolume;
+		if(FlxG.save.data.animatedbg != null) {
+			animatedbg = FlxG.save.data.animatedbg;
 		}
-		if(FlxG.save.data.pauseMusic != null) {
-			pauseMusic = FlxG.save.data.pauseMusic;
+		if(FlxG.save.data.camGlitch != null) {
+			camGlitch = FlxG.save.data.camGlitch;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{
@@ -277,6 +290,7 @@ class ClientPrefs {
 		FlxG.sound.volumeDownKeys = TitleState.volumeDownKeys;
 		FlxG.sound.volumeUpKeys = TitleState.volumeUpKeys;
 	}
+
 	public static function copyKey(arrayToCopy:Array<FlxKey>):Array<FlxKey> {
 		var copiedArray:Array<FlxKey> = arrayToCopy.copy();
 		var i:Int = 0;

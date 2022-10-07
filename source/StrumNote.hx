@@ -11,10 +11,8 @@ class StrumNote extends FlxSprite
 	private var colorSwap:ColorSwap;
 	public var resetAnim:Float = 0;
 	private var noteData:Int = 0;
-	public var direction:Float = 90;//plan on doing scroll directions soon -bb
-	public var downScroll:Bool = false;//plan on doing scroll directions soon -bb
-	public var sustainReduce:Bool = true;
-	
+	public var direction:Float = 30;//plan on doing scroll directions soon -bb
+
 	private var player:Int;
 	
 	public var texture(default, set):String = null;
@@ -121,10 +119,24 @@ class StrumNote extends FlxSprite
 
 	public function postAddedToGroup() {
 		playAnim('static');
-		x += Note.swagWidth * noteData;
-		x += 50;
-		x += ((FlxG.width / 2) * player);
-		ID = noteData;
+		if(PlayState.SONG.song.toLowerCase() == 'dud') {
+			var totallyrealnotedata = noteData;
+			switch(noteData) {
+				case 1:
+					totallyrealnotedata = 2;
+				case 2:
+					totallyrealnotedata = 1;
+			}
+			x += Note.swagWidth * totallyrealnotedata;
+			x += 50;
+			x += ((FlxG.width / 2) * player);
+			ID = noteData;
+		} else {
+			x += Note.swagWidth * noteData;
+			x += 50;
+			x += ((FlxG.width / 2) * player);
+			ID = noteData;
+		}
 	}
 
 	override function update(elapsed:Float) {

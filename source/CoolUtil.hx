@@ -6,7 +6,7 @@ import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import flixel.system.FlxSound;
-#if MODS_ALLOWED
+#if sys
 import sys.io.File;
 import sys.FileSystem;
 #else
@@ -31,12 +31,9 @@ class CoolUtil
 		if(num == null) num = PlayState.storyDifficulty;
 
 		var fileSuffix:String = difficulties[num];
-		if(fileSuffix != defaultDifficulty)
-		{
+		if(fileSuffix != defaultDifficulty) {
 			fileSuffix = '-' + fileSuffix;
-		}
-		else
-		{
+		} else {
 			fileSuffix = '';
 		}
 		return Paths.formatToSongPath(fileSuffix);
@@ -54,7 +51,7 @@ class CoolUtil
 	public static function coolTextFile(path:String):Array<String>
 	{
 		var daList:Array<String> = [];
-		#if MODS_ALLOWED
+		#if sys
 		if(FileSystem.exists(path)) daList = File.getContent(path).trim().split('\n');
 		#else
 		if(Assets.exists(path)) daList = Assets.getText(path).trim().split('\n');
